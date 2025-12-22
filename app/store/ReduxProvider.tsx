@@ -1,6 +1,9 @@
+"use client";
+
 import { Provider } from "react-redux";
 import { store } from ".";
 import { persistStore } from "redux-persist";
+import { CookiesProvider } from "react-cookie";
 
 persistStore(store); // persist the store
 
@@ -9,5 +12,9 @@ export default function ReduxProvider({
 }: {
   children: React.ReactNode;
 }) {
-  return <Provider store={store}>{children}</Provider>;
+  return (
+    <CookiesProvider>
+      <Provider store={store}>{children}</Provider>
+    </CookiesProvider>
+  );
 }

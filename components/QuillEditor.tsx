@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, use } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { useLocalStorage } from "react-use";
-import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/nextjs";
 
 // 一些工具函数导入
 import getArxivPapers from "./GetArxiv";

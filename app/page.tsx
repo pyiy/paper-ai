@@ -17,23 +17,19 @@ import { IndexProps } from "@/utils/global";
 import GoogleSignIn from "@/components/GoogleSignIn";
 
 // import Error from "@/app/global-error";
-export default async function Index({ params: { lng } }: IndexProps) {
+export default async function Index({ params }: IndexProps) {
+  const { lng } = await params;
   const { t } = await useTranslation(lng);
 
-  const cookieStore = cookies();
-  let supabase: any, user;
-  const canInitSupabaseClient = () => {
-    // This function is just for the interactive tutorial.
-    // Feel free to remove it once you have Supabase connected.
-    try {
-      supabase = createClient(cookieStore);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  };
 
-  const isSupabaseConnected = canInitSupabaseClient();
+  let supabase: any, user;
+  try {
+    supabase = await createClient();
+  } catch (e) {
+    // ignore
+  }
+
+  const isSupabaseConnected = !!supabase;
   if (supabase) {
     ({
       data: { user },
@@ -42,7 +38,7 @@ export default async function Index({ params: { lng } }: IndexProps) {
   console.log("user in page", user);
   return (
     <div className="flex-1 w-full flex flex-col gap-5 items-center">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+      <nav className="w-full flex justify-center border-b border-b-gray-200 h-16">
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
           {/* <DeployButton /> */}
           {/* 用来表示是否显示论文列表页 */}
@@ -55,7 +51,7 @@ export default async function Index({ params: { lng } }: IndexProps) {
       </nav>
       <PaperManagementWrapper lng={lng} />
       <QuillWrapper lng={lng} />
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
+      <footer className="w-full border-t border-t-gray-200 p-8 flex justify-center text-center text-xs">
         <div className="flex items-center space-x-4">
           {" "}
           {/* 添加flex容器来水平排列子元素 */}

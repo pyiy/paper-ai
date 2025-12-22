@@ -8,8 +8,8 @@ import { insertUserProfile } from "@/utils/supabase/supabaseutils";
 import React from "react";
 export default async function WelcomeScreen() {
   //   const [isLoading, setIsLoading] = React.useState(true);
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  // const cookieStore = cookies();
+  const supabase = await createClient();
 
   const {
     data,
@@ -27,9 +27,9 @@ export default async function WelcomeScreen() {
     <>
       {user ? (
         <div className="flex items-center gap-4">
-          Hey, {user.email}!
+          Hey, {user?.email}!
           <div style={{ margin: "20px", textAlign: "center" }}>
-            <h1>welcome, {user.email}!</h1>
+            <h1>welcome, {user?.email}!</h1>
           </div>
         </div>
       ) : (

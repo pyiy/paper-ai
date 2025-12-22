@@ -4,7 +4,7 @@
 import { insertUserProfile } from "@/utils/supabase/supabaseutils";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
-import * as Sentry from "@sentry/react";
+import * as Sentry from "@sentry/nextjs";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 
 export function SignInWithProvider({ provider, redirectTo }) {

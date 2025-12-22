@@ -17,7 +17,7 @@ export type Reference = {
 };
 
 export interface IndexProps {
-  params: {
+  params: Promise<{
     lng: string;
-  };
+  }>;
 }

@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   :root {
@@ -22,7 +21,7 @@
 
 @layer base {
   * {
-    @apply border-foreground/20;
+    border-color: hsl(var(--foreground) / 0.2);
   }
 }
 
@@ -55,7 +54,9 @@
 }
 
 .component-container {
-  @apply fixed top-1/4 right-0;
+  position: fixed;
+  top: 25%;
+  right: 0;
   transform: translateX(100%); /* 动画开始前，确保组件位于视图右侧之外 */
 }
 /* 想给上标添加一个鼠标放上去变手型的效果 */

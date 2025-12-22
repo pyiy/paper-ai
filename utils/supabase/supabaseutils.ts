@@ -11,8 +11,9 @@ import { createClient } from "@/utils/supabase/client";
 import * as Sentry from "@sentry/nextjs";
 
 //获取用户id
-export async function getUser() {
-  const { data, error } = await supabase.auth.getSession();
+export async function getUser(client?: SupabaseClient) {
+  const supabaseClient = client || supabase;
+  const { data, error } = await supabaseClient.auth.getSession();
   if (data.session) {
     const user = data.session.user;
     if (user) {
@@ -179,13 +180,14 @@ export async function fetchUserVipStatus(userId: string) {
 //profiles表 插入用户信息
 export async function insertUserProfile(data: any, supabase: SupabaseClient) {
   let user;
-  if (data.user) {
+  if (data?.user) {
     user = data.user;
-  } else {
+  } else if (data?.id) {
+    // data might be the user object itself
     user = data;
   }
 
-  if (user) {
+  if (user && user.id) {
     // console.log("user in insertUserProfile:", user);
     const currentTime = new Date().toISOString(); // 生成ISO格式的时间字符串
 

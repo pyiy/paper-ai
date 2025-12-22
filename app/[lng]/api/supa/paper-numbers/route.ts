@@ -1,5 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
+
 import { supabaseAdmin } from "@/utils/supabase/servicerole";
 
 export async function POST(req: Request) {
@@ -50,7 +49,7 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({
         message: "Error get paper numbers",
-        error: e.message,
+        error: (e as Error).message,
       }),
       {
         status: 400, // 或其他适当的错误状态码

@@ -15,11 +15,13 @@ import { SignInWithProvider } from "@/components/SignInWithProvider";
 import LinuxdoSignin from "@/components/LinuxdoSignin";
 export default async function Login({
   searchParams,
-  params: { lng },
+  params,
 }: {
-  searchParams: { message: string };
-  params: { lng: string };
+  searchParams: Promise<{ message: string }>;
+  params: Promise<{ lng: string }>;
 }) {
+  const { lng } = await params;
+  const { message } = await searchParams;
   const { t } = await useTranslation(lng);
 
   const signIn = async (formData: FormData) => {
@@ -27,8 +29,8 @@ export default async function Login({
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    // const cookieStore = cookies();
+    const supabase = await createClient();
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -53,11 +55,11 @@ export default async function Login({
   const signUp = async (formData: FormData) => {
     "use server";
 
-    const origin = headers().get("origin");
+    const origin = (await headers()).get("origin");
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    // const cookieStore = cookies();
+    const supabase = await createClient();
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -78,7 +80,7 @@ export default async function Login({
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
-      <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+      <nav className="w-full flex justify-center border-b border-b-gray-200 h-16">
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
           <DeployButton />
           <SettingsLink />
@@ -132,17 +134,17 @@ export default async function Login({
         </button>
         <button
           formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+          className="border border-gray-300 rounded-md px-4 py-2 text-foreground mb-2"
         >
           Sign Up（注册）
         </button>
         {/* 重置密码 */}
-        <button className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2">
+        <button className="border border-gray-300 rounded-md px-4 py-2 text-foreground mb-2">
           <Link href="/request-reset">Reset Password（重置密码）</Link>
         </button>
-        {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
+        {message && (
+          <p className="mt-4 p-4 bg-gray-100 text-foreground text-center">
+            {message}
           </p>
         )}
       </form>
@@ -157,7 +159,7 @@ export default async function Login({
           redirectTo="https://paperai.14790897.xyz/welcome"
         />
       </div>
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
+      <footer className="w-full border-t border-t-gray-200 p-8 flex justify-center text-center text-xs">
         <div className="flex items-center space-x-4">
           {" "}
           {/* 添加flex容器来水平排列子元素 */}

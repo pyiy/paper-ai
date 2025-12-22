@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import { insertUserProfile } from "@/utils/supabase/supabaseutils";
 
 export default async function AuthButton() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  // const cookieStore = cookies();
+  const supabase = await createClient();
 
   const {
     data,
@@ -18,8 +18,8 @@ export default async function AuthButton() {
   const signOut = async () => {
     "use server";
 
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    // const cookieStore = cookies();
+    const supabase = await createClient();
     await supabase.auth.signOut();
 
     return redirect("/login");

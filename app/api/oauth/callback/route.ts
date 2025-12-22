@@ -10,8 +10,7 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   if (code) {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const supabase = await createClient();
     // await supabase.auth.exchangeCodeForSession(code);
 
     // 使用授权码请求访问令牌
@@ -84,7 +83,7 @@ export async function GET(request: Request) {
       const tokenResponse = await axios.post(
         "https://connect.linux.do/oauth2/token",
         `grant_type=authorization_code&code=${code}&redirect_uri=${encodeURIComponent(
-          process.env.REDIRECT_URI
+          process.env.REDIRECT_URI || ""
         )}`,
         {
           headers: {

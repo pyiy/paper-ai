@@ -2,8 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
-  const cookieStore = cookies();
-  const supabaseAdmin = createClient(cookieStore);
+  // const cookieStore = cookies();
+  const supabaseAdmin = await createClient();
 
   // 从请求体中提取数据
   const { userId, paperContent, paperReference, paperNumber } =
