@@ -4,8 +4,9 @@ import { Provider } from "react-redux";
 import { store } from ".";
 import { persistStore } from "redux-persist";
 import { CookiesProvider } from "react-cookie";
+import { PersistGate } from "redux-persist/integration/react";
 
-persistStore(store); // persist the store
+const persistor = persistStore(store);
 
 export default function ReduxProvider({
   children,
@@ -14,7 +15,11 @@ export default function ReduxProvider({
 }) {
   return (
     <CookiesProvider>
-      <Provider store={store}>{children}</Provider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          {children}
+        </PersistGate>
+      </Provider>
     </CookiesProvider>
   );
 }

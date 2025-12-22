@@ -24,7 +24,7 @@ import {
   fetchUserVipStatus,
 } from "@/utils/supabase/supabaseutils";
 //动画
-import { CSSTransition } from "react-transition-group";
+// import { CSSTransition } from "react-transition-group";
 // import { animated, useSpring } from "@react-spring/web";
 
 //删除远程论文按钮
@@ -136,8 +136,8 @@ const PaperManagement = ({ lng }) => {
   // });
 
   //用于判断点击有没有落在区域中
-  const paperManagementRef = useRef(null); // 用于引用PaperManagement组件的根元素
-  const handleClickOutside = (event) => {
+  const paperManagementRef = useRef<HTMLDivElement>(null); // 用于引用PaperManagement组件的根元素
+  const handleClickOutside = (event: MouseEvent) => {
     if (
       paperManagementRef.current &&
       !paperManagementRef.current.contains(event.target) &&
@@ -163,88 +163,103 @@ const PaperManagement = ({ lng }) => {
   }, [showPaperManagement]); // 依赖项数组包含showPaperManagement状态
 
   return (
-    <CSSTransition
-      in={showPaperManagement}
-      timeout={2000}
-      classNames="slide"
-      unmountOnExit
-    >
-      {/* showPaperManagement ? ( */}
-      {/* <animated.div style={animations}> */}
-      <>
+
+    <>
+      {showPaperManagement && (
         <div
           ref={paperManagementRef}
-          className="paper-management-container flex flex-col items-center space-y-4"
+          className="paper-management-container flex flex-col items-center space-y-6 w-full max-w-2xl px-4 animate-in fade-in slide-in-from-bottom-10 duration-500"
         >
-          <div className="max-w-md w-full bg-blue-gray-100 rounded overflow-hidden shadow-lg mx-auto p-5">
-            <h1 className="font-bold text-3xl text-center">
-              {" "}
+          <div className="w-full glass-card rounded-2xl overflow-hidden shadow-xl mx-auto p-8 border border-white/20">
+            <h1 className="font-bold text-3xl text-center text-foreground tracking-tight mb-2">
               {t("Paper Management")}
             </h1>
-          </div>
-          {isVip ? (
-            <div>
-              <button
-                onClick={handleAddPaperClick}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                {t("+ Add Paper")}
-              </button>
-              <div className="flex flex-col items-center space-y-2">
-                <h2 className="text-xl font-semibold">
-                  {" "}
-                  {t("Your Cloud Papers")}
-                </h2>
-                {paperNumbers.length > 0 ? (
-                  <ul className="list-disc">
-                    {[...paperNumbers]
-                      .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
-                      .map((number, index) => (
-                        <li
-                          key={index}
-                          className={`bg-white w-full max-w-md mx-auto rounded shadow p-4 cursor-pointer ${
-                            number === paperNumberRedux ? "bg-yellow-200" : ""
-                          }`}
-                          onClick={() => handlePaperClick(number)}
-                        >
-                          <span>Paper {number}</span>
-                          <ParagraphDeleteButton
-                            index={index}
-                            removeReferenceUpdateIndex={async () => {
-                              await deletePaper(supabase, userId, number);
-                              const numbers = await getUserPaperNumbers(
-                                userId,
-                                supabase
-                              );
-                              setPaperNumbers(numbers || []); // 直接在这里更新状态
-                            }}
-                            isRemovePaper={true}
-                            title="Do you want to delete this paper?"
-                            text="This action cannot be undone"
-                          ></ParagraphDeleteButton>
-                          {/* <input
-                      type="text"
-                      value={paper.title}
-                      onChange={(e) => handleTitleChange(index, e.target.value)}
-                      placeholder="Enter paper title"
-                      className="mt-2 p-2 border rounded"
-                    /> */}
-                        </li>
-                      ))}
-                  </ul>
-                ) : (
-                  <p>No papers found.</p>
-                )}
+            <p className="text-center text-muted-foreground text-sm mb-6">
+              Manage your research papers and drafts
+            </p>
+
+            {isVip ? (
+              <div className="flex flex-col gap-6">
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleAddPaperClick}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 font-medium py-2.5 px-6 rounded-full flex items-center gap-2"
+                  >
+                    <span className="text-lg">+</span> {t("Add Paper")}
+                  </button>
+                </div>
+
+                <div className="flex flex-col space-y-3">
+                  <h2 className="text-lg font-semibold text-foreground px-1">
+                    {t("Your Cloud Papers")}
+                  </h2>
+                  <div className="max-h-[60vh] overflow-y-auto pr-2 space-y-3 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+                    {paperNumbers.length > 0 ? (
+                      <ul className="space-y-3">
+                        {[...paperNumbers]
+                          .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
+                          .map((number, index) => (
+                            <li
+                              key={index}
+                              className={`group relative flex items-center justify-between p-4 rounded-xl border transition-all duration-300 cursor-pointer hover:shadow-md ${
+                                number === paperNumberRedux
+                                  ? "bg-accent/50 border-primary/50 ring-1 ring-primary/20"
+                                  : "bg-card border-border/50 hover:border-primary/30 hover:-translate-y-0.5"
+                              }`}
+                              onClick={() => handlePaperClick(number)}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                                    number === paperNumberRedux
+                                      ? "bg-primary text-primary-foreground"
+                                      : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                                  }`}
+                                >
+                                  {number}
+                                </div>
+                                <span className="font-medium text-foreground">
+                                  Paper {number}
+                                </span>
+                              </div>
+
+                              <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                                <ParagraphDeleteButton
+                                  index={index}
+                                  removeReferenceUpdateIndex={async (e) => {
+                                    // e.stopPropagation(); // Stop propagation handled in button?
+                                    await deletePaper(supabase, userId, number);
+                                    const numbers = await getUserPaperNumbers(
+                                      userId,
+                                      supabase
+                                    );
+                                    setPaperNumbers(numbers || []);
+                                  }}
+                                  isRemovePaper={true}
+                                  title="Do you want to delete this paper?"
+                                  text="This action cannot be undone"
+                                />
+                              </div>
+                            </li>
+                          ))}
+                      </ul>
+                    ) : (
+                      <div className="text-center py-10 text-muted-foreground bg-muted/30 rounded-xl border border-dashed border-border">
+                        <p>No papers found. Create one to get started.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ) : (
-            <BuyVipButton lng={lng} />
-          )}
+            ) : (
+              <div className="flex justify-center w-full">
+                <BuyVipButton lng={lng} />
+              </div>
+            )}
+          </div>
         </div>
-      </>
-      {/* </animated.div>
-    ) : null */}
-    </CSSTransition>
+      )}
+    </>
   );
 };
 

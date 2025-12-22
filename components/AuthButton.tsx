@@ -32,7 +32,7 @@ export default async function AuthButton() {
         VIP
       </div> */}
       <form action={signOut}>
-        <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
+        <button className="py-2 px-4 rounded-md no-underline bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors shadow-sm font-medium">
           Logout
         </button>
       </form>
@@ -40,7 +40,7 @@ export default async function AuthButton() {
   ) : (
     <Link
       href="/login"
-      className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+      className="py-2 px-4 flex rounded-md no-underline bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm font-medium"
     >
       Login
     </Link>

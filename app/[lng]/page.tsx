@@ -38,15 +38,17 @@ export default async function Index({ params }: IndexProps) {
   console.log("user in page", user);
   return (
     <div className="flex-1 w-full flex flex-col gap-5 items-center">
-      <nav className="w-full flex justify-center border-b border-b-gray-200 h-16">
-        <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
+      <nav className="sticky top-0 z-50 w-full flex justify-center border-b border-border/40 bg-background/80 backdrop-blur-xl h-16 transition-all duration-300">
+        <div className="w-full max-w-5xl flex justify-between items-center px-6 text-sm font-medium">
           {/* <DeployButton /> */}
           {/* 用来表示是否显示论文列表页 */}
           <PaperListButtonWrapper />
+          <div className="flex items-center gap-4">
           {isSupabaseConnected && <AuthButton />}
           {/* 如果用户没有登录会出现谷歌的sign in按钮登录之后不会出现 */}
           {!user && <GoogleSignIn />}
           <SettingsLink />
+          </div>
         </div>
       </nav>
       <PaperManagementWrapper lng={lng} />

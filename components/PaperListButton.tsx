@@ -11,7 +11,7 @@ export default function PaperListButton() {
   };
   return (
     <div
-      className="py-2 px-3 flex rounded-md no-underline hover:bg-btn-background-hover border cursor-pointer"
+      className="py-2 px-3 flex rounded-md no-underline hover:bg-accent border hover:text-accent-foreground transition-colors cursor-pointer"
       onClick={handleClick}
     >
       <svg

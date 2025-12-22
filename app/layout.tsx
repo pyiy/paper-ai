@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       {/* <Script>{`
             if ('serviceWorker' in navigator) {
               window.addEventListener('load', function() {

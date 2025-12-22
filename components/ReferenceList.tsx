@@ -32,7 +32,7 @@ type ReferenceListProps = {
   lng: string;
 };
 //引用转换
-import Cite from "citation-js";
+// import Cite from "citation-js";
 
 const citationStyles = [
   { name: "中文", template: "custom-chinese" }, // 假设你有一个自定义的“中文”格式
@@ -114,13 +114,37 @@ function ReferenceList({ editor, lng }: ReferenceListProps) {
 
   async function generateCitation(doi, style) {
     try {
-      const citation = await Cite.async(doi);
-      const output = citation.format("bibliography", {
-        format: "text",
-        template: style,
-        lang: "en-US",
+      // Use the internal API route to avoid CORS issues
+      const response = await fetch(`/${lng}/api/citation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          doi,
+          style,
+          lang: "en-US",
+        }),
       });
-      return output;
+
+      if (!response.ok) {
+        let errorMsg = `API error: ${response.status} ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          if (errorData.details) errorMsg = errorData.details;
+        } catch (e) {
+          const text = await response.text();
+          console.error("API Error Response (Text):", text);
+          // Extract title or body if it's HTML
+          const match = text.match(/<title>(.*?)<\/title>/i) || text.match(/<body>(.*?)<\/body>/i);
+          if (match) errorMsg += ` - ${match[1].substring(0, 100)}`;
+          else errorMsg += ` - ${text.substring(0, 100)}`;
+        }
+        throw new Error(errorMsg);
+      }
+
+      const data = await response.json();
+      return data.citation || "";
     } catch (error) {
       console.error("Error generating citation:", error);
       return ""; // Return an empty string in case of error
