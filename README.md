@@ -82,10 +82,10 @@ git clone https://github.com/14790897/paper-ai.git
 cd paper-ai
 
 # 安装依赖项
-npm install
+pnpm install
 
 # 运行项目
-npm run dev
+pnpm dev
 
 ```
 
