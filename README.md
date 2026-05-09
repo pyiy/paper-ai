@@ -120,6 +120,40 @@ npm run dev
 
 - 效果：OAuth 登录成功后无需手动刷新，自动进入编辑器。
 
+### 待优化：next目前几乎都是ssr，没有ssg 2026.5.9
+原因：[lng] 动态路由缺少预设参数；没有使用suspense隔离SSR组件传染性；
+```
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /[lng]
+├ ƒ /[lng]/api/[...abc]
+├ ƒ /[lng]/api/supa/data
+├ ƒ /[lng]/api/supa/paper-numbers
+├ ƒ /[lng]/api/supa/user-papers
+├ ƒ /[lng]/api/supa/vip
+├ ƒ /[lng]/auth/callback
+├ ƒ /[lng]/login
+├ ƒ /[lng]/privacy
+├ ƒ /[lng]/request-reset
+├ ƒ /[lng]/reset-password
+├ ƒ /[lng]/sentry-example-page
+├ ƒ /[lng]/service
+├ ƒ /[lng]/set-guest
+├ ƒ /[lng]/settings
+├ ƒ /[lng]/welcome
+├ ƒ /api/lemon/callback
+├ ƒ /api/oauth/callback
+├ ƒ /api/sentry-example-api
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+```
 ## 参考文档
 
 1. semantic scholar api: https://api.semanticscholar.org/api-docs/#tag/Paper-Data/operation/get_graph_paper_relevance_search
